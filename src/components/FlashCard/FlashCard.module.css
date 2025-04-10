@@ -1,0 +1,16 @@
+.front {
+  color: black;
+  background-color: aquamarine;
+}
+
+.back {
+  color: black;
+  background-color: red;
+}
+
+.back::placeholder {
+  color: black;
+}
+.front::placeholder {
+  color: black;
+}

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 
-function ModifiableInput({ text, setText }) {
+function ModifiableInput({ className, text, setText }) {
   /*
     When user click, show input until clicked outside (maybe also add enter to get out of the event).
     When clicked outside delete event listener and update the text. (useEffect should be used).
@@ -37,13 +37,14 @@ function ModifiableInput({ text, setText }) {
       {/*When user click on input make input visible, when click outside make it invisible.*/}
       {isEditing ? (
         <input
+          className={className}
           ref={inputRef}
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder="Write here..."
         />
       ) : (
-        <h2 onClick={() => setIsEditing(true)}>
+        <h2 className={className} onClick={() => setIsEditing(true)}>
           {text === "" ? "Write here..." : text}
         </h2>
       )}

@@ -1,5 +1,7 @@
-import ModifiableInput from "./ModifiableInput";
+import ModifiableInput from "../ModifiableInput/ModifiableInput";
 import { useState } from "react";
+import styles from "./FlashCard.module.css";
+// Or you can use: import {name the components} from "source link"
 
 export default function FlashCard() {
   const side = {
@@ -20,11 +22,13 @@ export default function FlashCard() {
         {/*Used arrow function to not directly call the function each time the component*/}
         {flipped ? (
           <ModifiableInput
+            className={styles.front}
             text={ftext.front}
             setText={(newText) => handleTextChange("front", newText)}
           />
         ) : (
           <ModifiableInput
+            className={styles.back}
             text={ftext.back}
             setText={(newText) => handleTextChange("back", newText)}
           />
