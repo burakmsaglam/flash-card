@@ -1,6 +1,6 @@
 .front {
   color: black;
-  background-color: aquamarine;
+  background-color: blue;
 }
 
 .back {
@@ -9,8 +9,8 @@
 }
 
 .back::placeholder {
-  color: black;
+  color: white;
 }
 .front::placeholder {
-  color: black;
+  color: white;
 }
