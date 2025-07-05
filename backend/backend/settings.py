@@ -9,6 +9,13 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
+# Settings.py recommended file structure
+# 1. Django Defaults
+# 2. Installed Apps
+# 3. Middleware, templates, URLs, WSGI
+# 4. Database, authentication, internationalization
+# 5. Static/media files
+# 6. Custom 3rd party settings
 
 from pathlib import Path
 from decouple import config 
@@ -32,9 +39,14 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # Third party
+    'corsheaders',
+    'rest_framework',
+    
     #The path is flash_card/apps/ where FlashCard Config is
-    #We let the Django know the FlashCard know the app 
+    #We let the Django know the FlashCard know the app. Could have just use 'flash_card' but this way the app is defined more expilicitly enabling more configarations.
     'flash_card.apps.FlashCardConfig',
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -45,6 +57,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -128,3 +141,14 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Rest frame work settings
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES' : [
+        'rest_framework.permissions.AllowAny'
+    ]
+}
+
+# Cors config
+CORS_ORIGIN_ALLOW_ALL = True
+

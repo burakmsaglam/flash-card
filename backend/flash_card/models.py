@@ -5,8 +5,8 @@ from django.db import models
 class Flashcard(models.Model):
     front_side = models.CharField(max_length=255)
     back_side = models.CharField(max_length=255) 
-    def __str__(self):
-        return "This is a flashcard"
-    def showFlashCard(self):
-        return f"Front side text is {self.front_side}\nBack side text is {self.back_side}"
+    #def __str__(self):
+    #    return "This is a flashcard"
+    #def showFlashCard(self):
+    #    return f"Front side text is {self.front_side}\nBack side text is {self.back_side}"
     

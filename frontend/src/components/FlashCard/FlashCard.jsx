@@ -1,12 +1,12 @@
 import ModifiableInput from "../ModifiableInput/ModifiableInput";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./FlashCard.module.css";
 // Or you can use: import {name the components} from "source link"
 
-export default function FlashCard() {
+export default function FlashCard(front_side, back_side) {
   const side = {
-    front: "",
-    back: "",
+    front: front_side,
+    back: back_side,
   };
 
   const [flipped, setFlipped] = useState(false);

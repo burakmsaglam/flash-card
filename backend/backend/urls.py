@@ -16,6 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from django.views.generic import RedirectView
+# from django.conf.urls import url -- Use Path() instead
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,5 +32,7 @@ urlpatterns = [
     # When to use include()
 
     # You should always use include() when you include other URL patterns. The only exception is admin.site.urls, which is a pre-built URLconf provided by Django for the default admin site.
-    path("flash_card/", include("flash_card.urls"))
+    path("api/", include("flash_card.urls")),
+    # Redirect to admin
+    path('', RedirectView.as_view(url='/flash_card/')),
 ]

@@ -34,7 +34,7 @@ function ModifiableInput({ className, text, setText }) {
   // when clicked outside show the text
   return (
     <>
-      {/*When user click on input make input visible, when click outside make it invisible.*/}
+      {/*When user click on input have input visible, when click outside make it invisible.*/}
       {isEditing ? (
         <input
           className={className}
