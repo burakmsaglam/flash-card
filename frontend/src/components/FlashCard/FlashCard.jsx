@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import styles from "./FlashCard.module.css";
 // Or you can use: import {name the components} from "source link"
 
-export default function FlashCard(front_side, back_side) {
+export default function FlashCard({ front_side, back_side }) {
   const side = {
     front: front_side,
     back: back_side,

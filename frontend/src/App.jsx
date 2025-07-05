@@ -1,10 +1,12 @@
 import "./App.css";
 import FlashCard from "./components/FlashCard/FlashCard";
 import { nanoid } from "nanoid";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 function App() {
   let [currentElement, setCurrentElement] = useState(0);
+  let isFetched = useRef(false);
+
   let [sides, setSides] = useState({
     front_side: "",
     back_side: "",
@@ -12,26 +14,16 @@ function App() {
 
   const [slider, setSlider] = useState([]);
 
-  function setFrontSide(fronttext) {
-    setSides((prevSides) => ({
-      ...prevSides,
-      front_side: fronttext,
-    }));
-  }
-  function setBackSide(backtext) {
-    setSides((prevSides) => ({
-      ...prevSides,
-      back_side: backtext,
-    }));
-  }
-
   useEffect(() => {
     fetch("http://127.0.0.1:8000/api/flashcards/")
       .then((res) => res.json())
       .then((data) => {
-        setFrontSide(data[currentElement].front_side);
-        setBackSide(data[currentElement].back_side);
-        // Fix the data not showing up
+        if (!isFetched.current) {
+          isFetched.current = true;
+          data.forEach((val) => {
+            handleNewCard(val.front_side, val.back_side);
+          });
+        }
       })
       .catch((err) => {
         console.error("API Connection Failed", err);
@@ -39,12 +31,12 @@ function App() {
   }, []);
 
   // Adds new card.
-  function handleNewCard() {
+  function handleNewCard(front = sides.front_side, back = sides.back_side) {
     // From prev cards, add a new card.
     setSlider((prevCards) => {
       const newCards = [
         ...prevCards,
-        <FlashCard key={(nanoid(), sides.front_side, sides.back_side)} />,
+        <FlashCard key={nanoid()} front_side={front} back_side={back} />,
       ];
 
       setCurrentElement(newCards.length - 1);
