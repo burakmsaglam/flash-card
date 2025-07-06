@@ -99,28 +99,34 @@ function App() {
 
   return (
     <>
-      <p>FlashCard #{slider.length === 0 ? 0 : currentElement + 1}</p>
-      <div>
-        {slider.length > 0 ? (
-          <FlashCard
-            card={slider[currentElement]}
-            onUpdate={(updatedCard) => {
-              // Update slider
-              setSlider((prev) =>
-                prev.map((c) => (c.id === updatedCard.id ? updatedCard : c))
-              );
-            }}
-          />
-        ) : (
-          <p>No Flashcard Available</p>
-        )}
+      <div className="app-container">
+        <p className="card-counter">
+          FlashCard #{slider.length === 0 ? 0 : currentElement + 1}
+        </p>
+        <div className="flashcard-container">
+          {slider.length > 0 ? (
+            <FlashCard
+              card={slider[currentElement]}
+              onUpdate={(updatedCard) => {
+                // Update slider
+                setSlider((prev) =>
+                  prev.map((c) => (c.id === updatedCard.id ? updatedCard : c))
+                );
+              }}
+            />
+          ) : (
+            <p>No Flashcard Available</p>
+          )}
+        </div>
+        <div className="button-row">
+          <button onClick={handleSliderClick}>{"<"}</button>
+          <button onClick={handleSliderClick}>{">"}</button>
+          <button onClick={() => handleNewCard()}>+</button>
+          <button onClick={() => handleDeleteCard(slider[currentElement].id)}>
+            -
+          </button>
+        </div>
       </div>
-      <button onClick={handleSliderClick}>{"<"}</button>
-      <button onClick={handleSliderClick}>{">"}</button>
-      <button onClick={() => handleNewCard()}>✅ Make a new card.</button>
-      <button onClick={() => handleDeleteCard(slider[currentElement].id)}>
-        🚮 Delete the current card.
-      </button>
     </>
   );
 }

@@ -1,0 +1,9 @@
+.inputModify {
+  padding: 8px;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  border: none; /* this removes border */
+  outline: none; /* removes focus outline */
+}

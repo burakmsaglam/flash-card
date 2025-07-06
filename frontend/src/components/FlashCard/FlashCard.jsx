@@ -23,7 +23,6 @@ export default function FlashCard({ card, onUpdate }) {
       // Mapping local keys to backend keys
       const backendKey = side === "front" ? "front_side" : "back_side";
 
-      console.log(id);
       const resp = await fetch(`http://127.0.0.1:8000/api/flashcards/${id}/`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -43,7 +42,7 @@ export default function FlashCard({ card, onUpdate }) {
 
   return (
     <>
-      <div className="flash-card">
+      <div className={`flash-card  ${flipped ? "flipped" : ""}`}>
         {/*Used arrow function to not directly call the function each time the component*/}
         {flipped ? (
           <ModifiableInput
@@ -58,12 +57,13 @@ export default function FlashCard({ card, onUpdate }) {
             setText={(newText) => handleTextChange("back", newText, id)}
           />
         )}
-        <button
-          onClick={() => (flipped ? setFlipped(false) : setFlipped(true))}
-        >
-          Flip
-        </button>
       </div>
+      <button
+        className={styles.flipButton}
+        onClick={() => (flipped ? setFlipped(false) : setFlipped(true))}
+      >
+        Flip
+      </button>
     </>
   );
 }

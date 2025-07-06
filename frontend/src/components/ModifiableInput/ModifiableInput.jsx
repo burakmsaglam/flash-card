@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import styles from "./ModifiableInput.module.css";
 
 function ModifiableInput({ className, text, setText }) {
   /*
@@ -37,7 +38,7 @@ function ModifiableInput({ className, text, setText }) {
       {/*When user click on input have input visible, when click outside make it invisible.*/}
       {isEditing ? (
         <input
-          className={className}
+          className={styles.inputModify}
           ref={inputRef}
           value={text}
           onChange={(e) => setText(e.target.value)}
