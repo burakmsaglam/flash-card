@@ -7,21 +7,20 @@ function App() {
   let [currentElement, setCurrentElement] = useState(0);
   let isFetched = useRef(false);
 
-  let [sides, setSides] = useState({
-    front_side: "",
-    back_side: "",
-  });
-
   const [slider, setSlider] = useState([]);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/flashcards/")
+    fetch(`http://127.0.0.1:8000/api/flashcards/`)
       .then((res) => res.json())
       .then((data) => {
         if (!isFetched.current) {
+          // Prevent double render
           isFetched.current = true;
-          data.forEach((val) => {
-            handleNewCard(val.front_side, val.back_side);
+
+          setSlider((prev) => {
+            const newCards = [...prev, ...data];
+            setCurrentElement(newCards.length - 1);
+            return newCards;
           });
         }
       })
@@ -30,42 +29,54 @@ function App() {
       });
   }, []);
 
-  // Adds new card.
-  function handleNewCard(front = sides.front_side, back = sides.back_side) {
-    // From prev cards, add a new card.
-    setSlider((prevCards) => {
-      const newCards = [
-        ...prevCards,
-        <FlashCard key={nanoid()} front_side={front} back_side={back} />,
-      ];
+  // Adds new card. ID generated in backend when we push. Then on that id we use and update on front end.
+  async function handleNewCard(front = "Back Side", back = "Front Side") {
+    try {
+      // Push to backend
+      const res = await fetch("http://127.0.0.1:8000/api/flashcards/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ front_side: front, back_side: back }),
+      });
 
-      setCurrentElement(newCards.length - 1);
+      // Updating to front end, POST Method also returns newly made cards' JSON.
+      const newCard = await res.json();
 
-      return newCards;
-    });
+      // From prev cards, add a new card.
+      setSlider((prevCards) => {
+        const newCards = [...prevCards, newCard];
+        setCurrentElement(newCards.length - 1);
+        return newCards;
+      });
+    } catch (err) {
+      console.error("New card can not be made right now. Error: ", err);
+    }
   }
 
-  // Deletes the current card.
-  function handleDeleteCard(e) {
-    // From prev cards, delete the current element.
-    setSlider((prevCards) => {
-      let tempSlider = [...prevCards];
-      tempSlider.splice(currentElement, 1);
+  async function handleDeleteCard(idToDelete) {
+    try {
+      const res = await fetch(
+        `http://127.0.0.1:8000/api/flashcards/${idToDelete}/`,
+        {
+          method: "DELETE",
+        }
+      );
+      if (!res.ok) throw new Error("Failed to delete card");
 
-      const newIndex = currentElement - 1;
-      // Calculate for new set of cards, do not depend on other state to be completed.
-      const boundedIndex =
-        tempSlider.length === 0
-          ? 0
-          : newIndex < 0
-          ? tempSlider.length - 1
-          : newIndex;
-
-      // Setting new index seperately after calculating
-      setCurrentElement(boundedIndex);
-
-      return tempSlider;
-    });
+      setSlider((prev) => {
+        // filter
+        const filtered = prev.filter((card) => card.id !== idToDelete);
+        // set current element
+        setCurrentElement((prevIndex) => {
+          const newLenght = slider.length - 1;
+          // Return 0 or the max for index
+          return newLenght === 0 ? 0 : Math.max(0, prevIndex - 1);
+        });
+        return filtered;
+      });
+    } catch (err) {
+      console.log("Failed deleting. Error : ", err);
+    }
   }
 
   function handleSliderClick(e) {
@@ -89,11 +100,27 @@ function App() {
   return (
     <>
       <p>FlashCard #{slider.length === 0 ? 0 : currentElement + 1}</p>
-      <ol>{slider[currentElement]}</ol>
+      <div>
+        {slider.length > 0 ? (
+          <FlashCard
+            card={slider[currentElement]}
+            onUpdate={(updatedCard) => {
+              // Update slider
+              setSlider((prev) =>
+                prev.map((c) => (c.id === updatedCard.id ? updatedCard : c))
+              );
+            }}
+          />
+        ) : (
+          <p>No Flashcard Available</p>
+        )}
+      </div>
       <button onClick={handleSliderClick}>{"<"}</button>
       <button onClick={handleSliderClick}>{">"}</button>
-      <button onClick={handleNewCard}>✅ Make a new card.</button>
-      <button onClick={handleDeleteCard}>🚮 Delete the current card.</button>
+      <button onClick={() => handleNewCard()}>✅ Make a new card.</button>
+      <button onClick={() => handleDeleteCard(slider[currentElement].id)}>
+        🚮 Delete the current card.
+      </button>
     </>
   );
 }

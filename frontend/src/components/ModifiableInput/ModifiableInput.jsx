@@ -8,8 +8,6 @@ function ModifiableInput({ className, text, setText }) {
   const [isEditing, setIsEditing] = useState(false);
   let inputRef = useRef(null);
 
-  console.log("What we have in modifiable input is this :", text);
-
   function handleEditing(e) {
     // if user did not click on the input, make the input not visible.
     if (inputRef.current && !inputRef.current.contains(e.target)) {

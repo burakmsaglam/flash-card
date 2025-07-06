@@ -4,4 +4,4 @@ from . models import *
 class FlashcardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Flashcard
-        fields = ['front_side', 'back_side']
+        fields = ['id','front_side', 'back_side']
